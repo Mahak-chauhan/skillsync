@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - SkillSync</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Quiz Header -->
+    <header class="quiz-header">
+        <div class="quiz-header-content container">
+            <a href="dashboard.html" class="btn-tertiary">&larr; Back to Dashboard</a>
+            <span class="domain-badge" id="domainBadge">Select Domain</span>
+            <div class="timer" id="timer">05:00</div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+        </div>
+    </header>
+
+    <!-- Domain Selection -->
+    <section class="domain-selection" id="domainSelection">
+        <div class="container">
+            <h1 class="page-title">Choose Your Domain</h1>
+            <p class="page-subtitle">Select a skill domain to test your knowledge</p>
+            
+            <div class="domain-cards">
+                <div class="domain-card" onclick="startQuiz('coding')">
+                    <div class="domain-icon coding-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                    </div>
+                    <h2>Coding</h2>
+                    <p>Test your programming knowledge across multiple languages and concepts.</p>
+                    <div class="domain-topics">
+                        <span class="topic-tag">JavaScript</span>
+                        <span class="topic-tag">Python</span>
+                        <span class="topic-tag">HTML/CSS</span>
+                        <span class="topic-tag">React</span>
+                    </div>
+                    <a href="#" class="btn-primary" onclick="event.preventDefault(); startQuiz('coding')">Start Coding Quiz</a>
+                </div>
+
+                <div class="domain-card" onclick="startQuiz('design')">
+                    <div class="domain-icon design-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+                    </div>
+                    <h2>Design</h2>
+                    <p>Evaluate your understanding of design principles and visual aesthetics.</p>
+                    <div class="domain-topics">
+                        <span class="topic-tag">UI/UX</span>
+                        <span class="topic-tag">Color Theory</span>
+                        <span class="topic-tag">Typography</span>
+                        <span class="topic-tag">Layout</span>
+                    </div>
+                    <a href="#" class="btn-primary" onclick="event.preventDefault(); startQuiz('design')">Start Design Quiz</a>
+                </div>
+
+                <div class="domain-card" onclick="startQuiz('communication')">
+                    <div class="domain-icon comm-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    </div>
+                    <h2>Communication</h2>
+                    <p>Assess your communication skills and interpersonal abilities.</p>
+                    <div class="domain-topics">
+                        <span class="topic-tag">Presentation</span>
+                        <span class="topic-tag">Writing</span>
+                        <span class="topic-tag">Listening</span>
+                        <span class="topic-tag">Negotiation</span>
+                    </div>
+                    <a href="#" class="btn-primary" onclick="event.preventDefault(); startQuiz('communication')">Start Communication Quiz</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section (hidden initially) -->
+    <section class="quiz-section" id="quizSection" style="display: none;">
+        <div class="quiz-container container">
+            <p class="question-indicator">Question <span id="questionNumber">1</span> of <span id="totalQuestions">10</span></p>
+            
+            <div class="question-card">
+                <h2 class="question-text" id="questionText">Loading question...</h2>
+                <div class="options" id="optionsContainer">
+                    <!-- Options will be dynamically inserted -->
+                </div>
+            </div>
+
+            <div class="quiz-navigation">
+                <button class="btn-secondary" id="prevBtn" onclick="prevQuestion()">Previous</button>
+                <button class="btn-primary" id="nextBtn" onclick="nextQuestion()">Next</button>
+            </div>
+
+            <div class="question-dots" id="questionDots">
+                <!-- Dots will be dynamically inserted -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 SkillSync. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        // Quiz Data
+        const quizData = {
+            coding: [
+                { question: "What does HTML stand for?", options: ["Hyper Text Markup Language", "High Tech Modern Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language"], correct: 0 },
+                { question: "Which CSS property is used to change the text color?", options: ["text-color", "font-color", "color", "text-style"], correct: 2 },
+                { question: "What is the correct way to declare a variable in JavaScript?", options: ["variable x = 5", "var x = 5", "v x = 5", "int x = 5"], correct: 1 },
+                { question: "Which HTML tag is used for the largest heading?", options: ["<h6>", "<heading>", "<h1>", "<head>"], correct: 2 },
+                { question: "What does CSS stand for?", options: ["Creative Style Sheets", "Cascading Style Sheets", "Computer Style Sheets", "Colorful Style Sheets"], correct: 1 },
+                { question: "Which JavaScript method is used to select an element by its ID?", options: ["document.querySelector()", "document.getElementById()", "document.getElement()", "document.selectById()"], correct: 1 },
+                { question: "What is the correct HTML element for inserting a line break?", options: ["<break>", "<lb>", "<br>", "<newline>"], correct: 2 },
+                { question: "Which CSS property controls the font size?", options: ["text-size", "font-size", "font-style", "text-style"], correct: 1 },
+                { question: "What is the result of 2 + '2' in JavaScript?", options: ["4", "22", "NaN", "Error"], correct: 1 },
+                { question: "Which HTML attribute is used to define inline styles?", options: ["style", "class", "styles", "font-style"], correct: 0 }
+            ],
+            design: [
+                { question: "What is the primary purpose of white space in design?", options: ["To fill empty areas", "To improve readability and visual hierarchy", "To reduce content", "To save ink"], correct: 1 },
+                { question: "Which color model uses Red, Green, and Blue?", options: ["CMYK", "RGB", "HSL", "YUV"], correct: 1 },
+                { question: "What does UX stand for?", options: ["User Experience", "User Extension", "Universal Exchange", "Unique Experience"], correct: 0 },
+                { question: "Which principle deals with making similar elements look alike?", options: ["Contrast", "Proximity", "Similarity", "Balance"], correct: 2 },
+                { question: "What is the purpose of a grid system in design?", options: ["To limit creativity", "To create organized layouts", "To add colors", "To animate elements"], correct: 1 },
+                { question: "Which typography term describes the visual weight of text?", options: ["Kerning", "Tracking", "Font weight", "Leading"], correct: 2 },
+                { question: "What is the complementary color of blue?", options: ["Red", "Orange", "Green", "Purple"], correct: 1 },
+                { question: "What does UI stand for?", options: ["User Interface", "Universal Interface", "User Interaction", "Unique Interface"], correct: 0 },
+                { question: "Which design element creates visual interest through difference?", options: ["Repetition", "Contrast", "Alignment", "Proximity"], correct: 1 },
+                { question: "What is a wireframe in design?", options: ["A final design", "A basic layout sketch", "A color palette", "A font family"], correct: 1 }
+            ],
+            communication: [
+                { question: "What is the most important element of effective communication?", options: ["Speaking loudly", "Active listening", "Using technical terms", "Speaking quickly"], correct: 1 },
+                { question: "What percentage of communication is non-verbal?", options: ["10%", "30%", "Over 50%", "5%"], correct: 2 },
+                { question: "What is the best way to handle a difficult conversation?", options: ["Avoid it", "Stay calm and listen", "Raise your voice", "Interrupt frequently"], correct: 1 },
+                { question: "What does 'active listening' involve?", options: ["Only hearing words", "Fully concentrating and responding", "Talking most of the time", "Multitasking while listening"], correct: 1 },
+                { question: "Which communication style is most effective in workplace?", options: ["Aggressive", "Passive", "Assertive", "Passive-Aggressive"], correct: 2 },
+                { question: "What is the purpose of asking open-ended questions?", options: ["To get yes/no answers", "To encourage detailed responses", "To end conversations", "To confuse the listener"], correct: 1 },
+                { question: "How should you handle feedback criticism?", options: ["Ignore it", "Get defensive", "Listen and reflect", "Argue immediately"], correct: 2 },
+                { question: "What is 'body language' in communication?", options: ["Written words", "Non-verbal physical signals", "Email format", "Voice pitch only"], correct: 1 },
+                { question: "What is the best approach for public speaking?", options: ["Read directly from slides", "Practice thoroughly and engage audience", "Speak as fast as possible", "Avoid eye contact"], correct: 1 },
+                { question: "What does 'empathy' mean in communication?", options: ["Being indifferent", "Understanding others' feelings", "Only focusing on facts", "Being loud"], correct: 1 }
+            ]
+        };
+
+        // Quiz State
+        let currentDomain = null;
+        let currentQuestion = 0;
+        let answers = [];
+        let timeLeft = 300;
+        let timerInterval = null;
+
+        function startQuiz(domain) {
+            currentDomain = domain;
+            currentQuestion = 0;
+            answers = new Array(quizData[domain].length).fill(null);
+            timeLeft = 300;
+
+            // Hide domain selection, show quiz
+            document.getElementById('domainSelection').style.display = 'none';
+            document.getElementById('quizSection').style.display = 'block';
+
+            // Initialize quiz
+            const questions = quizData[domain];
+            document.getElementById('domainBadge').textContent = domain.charAt(0).toUpperCase() + domain.slice(1) + ' Quiz';
+            document.getElementById('totalQuestions').textContent = questions.length;
+            
+            createQuestionDots(questions.length);
+            showQuestion(questions[currentQuestion]);
+            startTimer();
+        }
+
+        function createQuestionDots(count) {
+            const dotsContainer = document.getElementById('questionDots');
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'question-dot' + (i === 0 ? ' current' : '');
+                dot.onclick = () => goToQuestion(i);
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function showQuestion(question) {
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('questionNumber').textContent = currentQuestion + 1;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'option' + (answers[currentQuestion] === index ? ' selected' : '');
+                optionEl.textContent = option;
+                optionEl.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionEl);
+            });
+            
+            updateNavigation();
+            updateProgress();
+            updateDots();
+        }
+
+        function selectOption(index) {
+            answers[currentQuestion] = index;
+            showQuestion(quizData[currentDomain][currentQuestion]);
+        }
+
+        function nextQuestion() {
+            const questions = quizData[currentDomain];
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion(questions[currentQuestion]);
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(quizData[currentDomain][currentQuestion]);
+            }
+        }
+
+        function goToQuestion(index) {
+            currentQuestion = index;
+            showQuestion(quizData[currentDomain][currentQuestion]);
+        }
+
+        function updateNavigation() {
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            const questions = quizData[currentDomain];
+            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'Finish' : 'Next';
+        }
+
+        function updateProgress() {
+            const questions = quizData[currentDomain];
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function updateDots() {
+            const dots = document.querySelectorAll('.question-dot');
+            dots.forEach((dot, index) => {
+                dot.className = 'question-dot';
+                if (index === currentQuestion) dot.classList.add('current');
+                if (answers[index] !== null) dot.classList.add('answered');
+            });
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('timer').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    finishQuiz();
+                }
+            }, 1000);
+        }
+
+        function finishQuiz() {
+            clearInterval(timerInterval);
+            
+            // Calculate score
+            const questions = quizData[currentDomain];
+            let score = 0;
+            answers.forEach((answer, index) => {
+                if (answer === questions[index].correct) score++;
+            });
+            
+            const percent = Math.round((score / questions.length) * 100);
+            
+            // Store results
+            const result = {
+                score: score,
+                total: questions.length,
+                percent: percent,
+                time: 300 - timeLeft,
+                domain: currentDomain,
+                date: new Date().toISOString()
+            };
+            
+            // Save to localStorage
+            const results = JSON.parse(localStorage.getItem('quizResults')) || [];
+            results.push(result);
+            localStorage.setItem('quizResults', JSON.stringify(results));
+            
+            // Redirect to results
+            window.location.href = 'quiz-result.html';
+        }
+
+        // Check login
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
+
