@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - SkillSync</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <a href="index.html" class="logo">SkillSync</a>
+            <a href="../index.html" class="logo">SkillSync</a>
         </div>
         <nav class="sidebar-nav">
             <a href="dashboard.html" class="nav-item active">
@@ -214,70 +214,8 @@
         </div>
     </main>
 
-    <script src="app.js"></script>
-    <script>
-        // Check if user is logged in
-        if (!localStorage.getItem('isLoggedIn')) {
-            window.location.href = 'login.html';
-        }
-
-        // Load user data
-        const userEmail = localStorage.getItem('userEmail') || 'john@example.com';
-        const userName = userEmail.split('@')[0];
-        document.getElementById('welcomeName').textContent = userName.charAt(0).toUpperCase() + userName.slice(1);
-        document.getElementById('userName').textContent = userName.charAt(0).toUpperCase() + userName.slice(1);
-        document.getElementById('userEmail').textContent = userEmail;
-        document.getElementById('userAvatar').textContent = userName.charAt(0).toUpperCase();
-
-        // Load saved quiz results
-        function loadDashboardData() {
-            const results = JSON.parse(localStorage.getItem('quizResults')) || [];
-            
-            if (results.length > 0) {
-                const totalQuizzes = results.length;
-                const avgScore = Math.round(results.reduce((sum, r) => sum + r.percent, 0) / totalQuizzes);
-                
-                document.getElementById('quizzesTaken').textContent = totalQuizzes;
-                document.getElementById('averageScore').textContent = avgScore + '%';
-                document.getElementById('overallScore').textContent = avgScore + '%';
-
-                // Update skill percentages
-                const domainScores = {};
-                results.forEach(r => {
-                    if (!domainScores[r.domain]) domainScores[r.domain] = [];
-                    domainScores[r.domain].push(r.percent);
-                });
-
-                if (domainScores['coding']) {
-                    const codingAvg = Math.round(domainScores['coding'].reduce((a, b) => a + b, 0) / domainScores['coding'].length);
-                    document.getElementById('codingPercent').textContent = codingAvg + '%';
-                    document.getElementById('codingProgress').style.width = codingAvg + '%';
-                }
-                if (domainScores['design']) {
-                    const designAvg = Math.round(domainScores['design'].reduce((a, b) => a + b, 0) / domainScores['design'].length);
-                    document.getElementById('designPercent').textContent = designAvg + '%';
-                    document.getElementById('designProgress').style.width = designAvg + '%';
-                }
-                if (domainScores['communication']) {
-                    const commAvg = Math.round(domainScores['communication'].reduce((a, b) => a + b, 0) / domainScores['communication'].length);
-                    document.getElementById('commPercent').textContent = commAvg + '%';
-                    document.getElementById('commProgress').style.width = commAvg + '%';
-                }
-            }
-        }
-
-        loadDashboardData();
-
-        function logout() {
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('userEmail');
-            window.location.href = 'login.html';
-        }
-
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-        }
-    </script>
+    <script src="../js/app.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/dashboard.js"></script>
 </body>
 </html>
-
